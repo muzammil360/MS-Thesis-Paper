@@ -17,3 +17,8 @@ The following are the main files available:
 - numcompress.sty - an additional package required for use with reference style models 3, 3a, 4 and 6.
 
 Copyright 2007-2010, Elsevier. Bugs, feature requests, suggestions and comments may be mailed to elsarticle@river-valley.com. elsarticle.cls, related documentation and supporting packages are released under the LATEX Project Public Licence, either version 1.3 or any later version. This work has the LPPL maintenance status 'author-maintained'.
+
+-------------------------
+Version info:
+
+- draft1: 9 page length, includes training loss and shortened experimental evaluation
