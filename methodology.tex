@@ -138,5 +138,43 @@ Once RoI pooling has adjusted the size of feature map to fixed dimensions, the f
     \label{fig:classifier}
 \end{figure}
 
-% \subsubsection{Training loss}
+\subsubsection{Training loss}
+While training the Faster-RCNN, we train two sub-networks: RPN and classifier. Both of these networks have two objectives: label classification and bounding box regression. Following two equations indicate the RPN and classifier loss. First term corresponds to label classification and second term corresponds to bounding box regression. 
+
+$$Loss_{RPN}= \frac{1}{N_{cls}}\sum_i L_{cls}(\hat{p}_i,p_i) + \frac{\lambda_r}{N_{reg}}\sum_i p_i L_{reg}(\hat{t}_i,t_i)$$
+
+\begin{small}
+$$Loss_{cla} = \frac{1}{N_{cls}}\sum_i L_{cls}(\hat{q}_i,q_i) + \frac{\lambda_c}{N_{reg}}\sum_i [q_i > 0] L_{reg}(\hat{u}_i,u_i)$$
+\end{small}
+where \\
+$\hat{p}_i=$ anchor label prediction \\
+$\hat{t}_i=$ anchor bounding box prediction \\
+$\hat{q}_i=$ RoI label prediction \\
+$\hat{u}_i=$ RoI bounding box prediction \\
+${p}_i=$ anchor ground truth label \\
+${t}_i=$ anchor ground truth bounding box  \\
+${q}_i=$ RoI ground truth label  \\
+${u}_i=$ RoI ground truth bounding box  \\
+$\lambda_r =$ RPN loss balance coef. \\
+$\lambda_c =$ classifier loss balance coef. \\
+$N_{cls}=$ mini-batch size \\
+$N_{reg}=$ total anchors
+
+Classification loss $L_{cls}$ is the standard log loss and regression loss $L_{reg}$ is the smooth-$L_1$ loss as defined below. 
+
+$$ L_{cls}(\hat{y},y) = -\sum_j y_jlog(\hat{y}_j) $$
+$$ L_{reg}(\hat{b},b) = \sum_{j=1}^4 SL_1(\hat{b}_j - b_j) $$
+$$SL_1(x) = \begin{cases}
+0.5x^2, & \text{if } |x|<1 \\
+x-0.5,  & \text{otherwise}
+\end{cases}
+$$
+where input parameters to each function carry standard meaning. 
+
+Total loss of the network is simply the sum of RPN loss and classifier loss.
+$$ Loss = Loss_{RPN} + Loss_{cla} $$
+
+Apart from that notice the term $p_i$ in regression term of RPN loss. This makes sure that regression loss is activated only if proposal corresponds to an object, not the background.  Thus bounding box predictions corresponding to background proposals do not contribute towards training. Furthermore, the expression $[q_i>0]$ does a similar job in classifier loss. This again acts as a flag to add regression loss only corresponding to actual objects and not the background. 
+
+$\lambda_r$ and $\lambda_c$ act as the balancing parameter  between label classification and bounding box regression. The authors of Faster-RCNN claim that $\lambda_r$ is redundant and Faster-RCNN remains insensitive to a large range of $\lambda_r$. 
 
