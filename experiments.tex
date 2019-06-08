@@ -35,9 +35,44 @@ $\sigma$ & 0.20\% \\ \hline
 \end{table}
 
 \subsection{Stage-wise analysis experiments}
-In this part, we analyse both stage 1 and 2 independently. We use AUC (Area Under the Curve) as the evaluation metric since it is not affected by class imbalance. We naturally have class imbalance since very few trespassing frames exist as compared to other frames. Table \ref{table:auc-time-analysis-s1} shows that stage 1 takes only 30 ms where as stage 2 takes around 500 ms on $1080 \times 960$ sized frame. This shows that stage 1 is approx. $16.7$ times faster than stage 2 wich resonates with our goal stated in Section \ref{sec:goal}. 
+In this part, we analyse both stage 1 and 2 independently. F1 score is primarily used for analysis as it helps in selecting optimum operating threshold. Apart from that, we use AUC (Area Under the Curve) as the evaluation metric since it is not affected by class imbalance. We naturally have class imbalance since very few trespassing frames exist as compared to other frames. Table \ref{table:auc-time-analysis-s1} shows that stage 1 takes only 30 ms where as stage 2 takes around 500 ms on $1080 \times 960$ sized frame. This shows that stage 1 is approx. $16.7$ times faster than stage 2 wich resonates with our goal stated in section \ref{sec:goal}. 
 
-\textcolor{red}{stage 2 methodoloy-if space permits}
+Figure \ref{fig:f1-analysis-mog} shows how f1 score of stage 1 changes w-r-t threshold (percentage of foreground pixels). At $0.1\%$, it achieves maximum f1 score of 0.91. Therefore, the stage 1 should be operated at this threshold.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{images/f1-analysis-mog.png}
+    \caption{Stage 1 evaluation}
+    \label{fig:f1-analysis-mog}
+\end{figure}
+
+Figure \ref{fig:f1-analysis-s2} shows the f1 score variation for stage 2. Y-axis indicates f1 score whereas x-axis varies prediction probability threshold $\tau$. It is clear that maximum f1 score of 0.89 is achieved on $\tau=0.3$. Therefore, stage 2 should be operated at this threshold.
+
+Note that Faster-RCNN, which is the backbone of our stage 2, produces multiple object predictions corresponding to each input image\footnote{image and frame have been used interchangably in this text}. However, we model our problem as a binary classification of input frame as trespassing frame or non-trespassing frame. Therefore, we need to map Faster-RCNN predictions to binary labels i.e. trespassing or non-trespassing. We achieve this mapping by the following definition:
+
+$$
+\text{prediction} = 
+\begin{cases}
+% 1, &    \text{\footnotesize{if there is at least one valid person detection}} \\
+1, &    \text{if any valid person detection exists} \\
+0, &    \text{otherwise}
+\end{cases}
+$$
+where \\
+$\text{valid person detection} = \hat{p}_i>\tau \quad \& \quad IoU(\hat{b}_i,b_j)>0.5$ \\
+$\hat{b}_i =i^{th} \text{ prediction bounding box}$ \\
+$b_j =j^{th} \text{ ground truth bounding box}$ \\
+$\hat{p}_i = i^{th} \text{prediction probability}$ \\
+$\tau =  \text{prediction probability threshold}$
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{images/f1-analysis-s2.png}
+    \caption{Stage 2 evaluation}
+    \label{fig:f1-analysis-s2}
+\end{figure}
+
+
 
 \begin{table}
 \centering
