@@ -35,7 +35,7 @@ $\sigma$ & 0.20\% \\ \hline
 \end{table}
 
 \subsection{Stage-wise analysis experiments}
-In this part, we analyse both stage 1 and 2 independently. F1 score is primarily used for analysis as it helps in selecting optimum operating threshold. Apart from that, we use AUC (Area Under the Curve) as the evaluation metric since it is not affected by class imbalance. We naturally have class imbalance since very few trespassing frames exist as compared to other frames. Table \ref{table:auc-time-analysis-s1} shows that stage 1 takes only 30 ms where as stage 2 takes around 500 ms on $1080 \times 960$ sized frame. This shows that stage 1 is approx. $16.7$ times faster than stage 2 wich resonates with our goal stated in section \ref{sec:goal}. 
+In this part, we analyse both stage 1 and 2 independently. F1 score is primarily used for analysis as it helps in selecting optimum operating threshold. Apart from that, we use AUC (Area Under the Curve) as the evaluation metric since it is not affected by class imbalance. We naturally have class imbalance since very few trespassing frames exist as compared to other frames. Table \ref{table:auc-time-analysis-s1} shows AUC and mean processing time for both stages. Stage 1 has AUC of 0.94 wheras stage 2 shows an AUC of 0.81. The first stage takes 30 ms  (on average) to process a frame while stage 2 takes around 500 ms on $1080 \times 960$ sized frame. This shows that stage 1 is approx. $16.7$ times faster than stage 2 wich resonates with our goal stated in section \ref{sec:goal}. 
 
 Figure \ref{fig:f1-analysis-mog} shows how f1 score of stage 1 changes w-r-t threshold (percentage of foreground pixels). At $0.1\%$, it achieves maximum f1 score of 0.91. Therefore, the stage 1 should be operated at this threshold.
 
@@ -91,7 +91,7 @@ stage 2     & 0.81    & 500  \\ \hline
 \subsection{Noise analysis experiments}
 Third and final part of our experimental evaluation is noise analysis. In this part, we evaluate the robustness of stage 1 against noise. In terms of noise, we have 3 parameters: $p, \mu, \text{ and } \sigma$. Description of these parameters has been discussed in table \ref{table:noise-params}. To study the influence of one parameter, we vary it while keeping the others constant. 
 
-Table \ref{table:noise-analysis-auc-mog} shows AUC for stage 1 varying $p$ and $\mu$. We use the noise parameters ($AR=0.5$, $\mu=0.5\%$, $\sigma=0.2\%$) while varying $p$ and ($AR=0.5$, $p=2\%$, $\sigma=0.2\%$) while varying $\mu$. For both $p$ and $\mu$, it is clear that increase in noise level decreases the performance of stage 1.  
+Table \ref{table:noise-analysis-auc-mog} shows AUC for stage 1 varying $p$ and $\mu$. We use the noise parameters ($AR=0.5$, $\mu=0.5\%$, $\sigma=0.2\%$) while varying $p$ and ($AR=0.5$, $p=2\%$, $\sigma=0.2\%$) while varying $\mu$. For both $p$ and $\mu$, it is clear that increase in noise level decreases the AUC of stage 1.  This result is also verified by f1 score plot of stage 1. Figure \ref{fig:noise-analysis-mog-p} and \ref{fig:noise-analysis-mog-mu} show the effect of change in $p$ and $\mu$ respectively. Figure \ref{fig:noise-analysis-mog-p} shows that as $p$ increases, the whole f1 score curve shit downward. This indicates the degradation of performance with increase in $p$. Similar observation can also be made in figure \ref{fig:noise-analysis-mog-mu} (showing the effect of change in $\mu$); however, the change is less prominent in this case.  
 
 
 \begin{table}
@@ -123,3 +123,17 @@ $\mu$         & AUC  \\ \hline \hline
 \end{tabular}
 
 \end{table}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{images/noise-analysis-mog-p.png}
+    \caption{Noise analysis - varying $p$}
+    \label{fig:noise-analysis-mog-p}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{images/noise-analysis-mog-mu.png}
+    \caption{Noise analysis - varying $\mu$}
+    \label{fig:noise-analysis-mog-mu}
+\end{figure}
