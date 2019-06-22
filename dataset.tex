@@ -1,5 +1,5 @@
 \section{Dataset}
-The dataset we used for experimental evaluation is VIRAT 2.0 \cite{virat20}. Instead of directly using the VIRAT 2.0 dataset, we synthesize more data from it. The reason why we need to do that is original dataset targets activity classification and is therefore enriched with human activity. We on the other hand need sparse activity data. Therefore, we use original VIRAT 2.0 dataset to generate new data that has controlled amount of activity to background ratio. Figure \ref{fig:synthetic-dataset-generator}\textcolor{red}{(removable)} helps understand our synthetic dataset generator.  
+The dataset we used for experimental evaluation is VIRAT 2.0 \cite{virat20}. Instead of directly using the VIRAT 2.0 dataset, we synthesize more data from it. The reason why we need to do that is original dataset targets activity classification and is therefore enriched with human activity. We on the other hand need sparse activity data. Therefore, we use original VIRAT 2.0 dataset to generate new data that has controlled amount of activity to background ratio. Figure \ref{fig:synthetic-dataset-generator} helps understand our synthetic dataset generator.  
 
 \begin{figure}
     \centering
@@ -28,7 +28,7 @@ Step 1 is simple. We manually scroll through a video and identify a frame with n
 
 An important concept associated with this procedure is \textit{Activity Ratio}. It is defined as 
 $$ \text{Activity Ratio} = \text{AR} = \frac{1}{1+nBG} $$
-where $nBG=$ number of background blocks per activity block. Figure \ref{fig:synthetic-video} has $nBG=1$. Table \ref{table:activity-ratio} \textcolor{red}{(removable)} explains the relationship between $nBG$ and AR. 
+where $nBG=$ number of background blocks per activity block. Figure \ref{fig:synthetic-video} has $nBG=1$. Table \ref{table:activity-ratio} explains the relationship between $nBG$ and AR. 
 
 
 \begin{table}
