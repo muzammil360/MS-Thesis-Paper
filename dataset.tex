@@ -43,7 +43,7 @@ nBG & nAB:nBG & AR   \\ \hline \hline
 \end{tabular}
 \end{table}
 
-\subsubsection{Adding noise}
+\subsection{Adding noise}
 In order to test the robustness of our approach, we also add noise to our synthetic data. Table \ref{table:noise-params} discuses the parameters that control the level of noise. We use \textbf{salt and pepper} noise in our experiments.
 
 In order to add noise, we first select $p\%$ of frames from each background block. Each of the frame is equally likely to be selected. Now we draw an integer $r$ from normal distribution with parameters $\mu$ and $\sigma$. Now for each selected frame, we select $r$ pixels and add noise to them. Again all pixels are equally likely. 
