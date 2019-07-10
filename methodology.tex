@@ -1,4 +1,5 @@
 \section{Methodology}
+\label{sec:methodology}
 \subsection{Problem formulation}
 \label{sec:prob-formulation}
 Given an input surveillance video containing $N$ frames, we want to produce a binary time series of same length $N$ such that each index $i$ predicts the labels $y_i$ of corresponding frame $f_i$ . Human trespassing label is assigned to positive class (1) and ``other activity'' label is assigned to negative class (0). Since, each prediction depends only on corresponding frame $f_i$, our problem boils down to determining a function $D$ such that 
@@ -146,21 +147,20 @@ $$Loss_{RPN}= \frac{1}{N_{cls}}\sum_i L_{cls}(\hat{p}_i,p_i) + \frac{\lambda_r}{
 \begin{small}
 $$Loss_{cla} = \frac{1}{N_{cls}}\sum_i L_{cls}(\hat{q}_i,q_i) + \frac{\lambda_c}{N_{reg}}\sum_i [q_i > 0] L_{reg}(\hat{u}_i,u_i)$$
 \end{small}
-where \\
-$\hat{p}_i=$ anchor label prediction \\
-$\hat{t}_i=$ anchor bounding box prediction \\
-$\hat{q}_i=$ RoI label prediction \\
-$\hat{u}_i=$ RoI bounding box prediction \\
-${p}_i=$ anchor ground truth label \\
-${t}_i=$ anchor ground truth bounding box  \\
-${q}_i=$ RoI ground truth label  \\
-${u}_i=$ RoI ground truth bounding box  \\
-$\lambda_r =$ RPN loss balance coef. \\
-$\lambda_c =$ classifier loss balance coef. \\
-$N_{cls}=$ mini-batch size \\
-$N_{reg}=$ total anchors
-
-Classification loss $L_{cls}$ is the standard log loss and regression loss $L_{reg}$ is the smooth-$L_1$ loss as defined below. 
+% where \\
+% $\hat{p}_i=$ anchor label prediction \\
+% $\hat{t}_i=$ anchor bounding box prediction \\
+% $\hat{q}_i=$ RoI label prediction \\
+% $\hat{u}_i=$ RoI bounding box prediction \\
+% ${p}_i=$ anchor ground truth label \\
+% ${t}_i=$ anchor ground truth bounding box  \\
+% ${q}_i=$ RoI ground truth label  \\
+% ${u}_i=$ RoI ground truth bounding box  \\
+% $\lambda_r =$ RPN loss balance coef. \\
+% $\lambda_c =$ classifier loss balance coef. \\
+% $N_{cls}=$ mini-batch size \\
+% $N_{reg}=$ total anchors
+Table \ref{table:variable-list} defines the variables used in above equations. Classification loss $L_{cls}$ is the standard log loss and regression loss $L_{reg}$ is the smooth-$L_1$ loss as defined below. 
 
 $$ L_{cls}(\hat{y},y) = -\sum_j y_jlog(\hat{y}_j) $$
 $$ L_{reg}(\hat{b},b) = \sum_{j=1}^4 SL_1(\hat{b}_j - b_j) $$
@@ -178,3 +178,23 @@ Apart from that notice the term $p_i$ in regression term of RPN loss. This makes
 
 $\lambda_r$ and $\lambda_c$ act as the balancing parameter  between label classification and bounding box regression. The authors of Faster-RCNN claim that $\lambda_r$ is redundant and Faster-RCNN remains insensitive to a large range of $\lambda_r$. 
 
+\begin{table}[]
+    \centering
+    \begin{tabular}{| l | l |} \hline
+variable & description \\ \hline \hline
+$\hat{p}_i$ & anchor label prediction \\ \hline 
+$\hat{t}_i$ & anchor bounding box prediction \\ \hline 
+$\hat{q}_i$ & RoI label prediction \\ \hline 
+$\hat{u}_i$ & RoI bounding box prediction \\ \hline 
+${p}_i$ & anchor ground truth label \\ \hline 
+${t}_i$ & anchor ground truth bounding box \\ \hline 
+${q}_i$ & RoI ground truth label \\ \hline 
+${u}_i$ & RoI ground truth bounding box  \\ \hline 
+$\lambda_r $ & RPN loss balance coef. \\ \hline 
+$\lambda_c $ & classifier loss balance coef.  \\ \hline 
+$N_{cls}$ & mini-batch size  \\ \hline 
+$N_{reg}$ & total anchors \\ \hline 
+    \end{tabular}
+    \caption{Description of variables used in loss function}
+    \label{table:variable-list}
+\end{table}{}

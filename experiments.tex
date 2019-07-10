@@ -1,4 +1,4 @@
-\section{Experiments and discussion}
+\subsection{Experiments and discussion}
 In order to validate our approach, we carry out an extensive and in depth experimental evaluation.  We study our proposed approach from three different perspectives: 
 
 \begin{enumerate}
@@ -9,7 +9,7 @@ In order to validate our approach, we carry out an extensive and in depth experi
 
 We shall start by discussing time-accuracy trade-off. This allows us to study end-to-end performance of pipeline while trading off computational time.  We also do stage-wise analysis where each stage is evaluated independently of other. This helps us understand which stage is acting as bottleneck in terms of performance. Additionally, we also do noise analysis to understand the robustness of system to noise.
 
-\subsection{Time-accuracy trade-off experiment}
+\subsubsection{Time-accuracy trade-off experiment}
 In time-accuracy trade off experiment, we study how the data can be processed in less time by compromising performance. We vary certain control parameters (stage 1 threshold in this case) and observe the time it takes to process the data along with the performance of the complete pipeline. Figure \ref{fig:time-acc-tradeoff-ar-mog} shows time-accuracy trade off for varying activity ratios (AR). The trade off curve depicts f1 score on y-axis and normalized processing time on the x-axis. Normalized processing time is defined as: 
 $$\text{normalized time} = \frac{\text{total time to process video data}}{\text{length of video data}}$$
 It is clear (in Figure \ref{fig:time-acc-tradeoff-ar-mog}) that as the f1 score goes up, the normalized processing time also goes up, indicating the trade off. Notice that as the AR decreases, the trade off curve shifts to the left. This is because in less active environment (low AR), stage 1 is able to filter out more frames and thus less frames need to be processed by stage 2. Thus the curve shifts to the left indicating less overall processing time.   
@@ -36,7 +36,7 @@ $\sigma$ & 0.20\% \\ \hline
 \end{tabular}
 \end{table}
 
-\subsection{Stage-wise analysis experiments}
+\subsubsection{Stage-wise analysis experiments}
 In this part, we analyse both stage 1 and 2 independently. F1 score is primarily used for analysis as it helps in selecting optimum operating threshold. Apart from that, we use AUC (Area Under the Curve) as the evaluation metric since it is not affected by class imbalance. We naturally have class imbalance since very few trespassing frames exist as compared to other frames. Table \ref{table:auc-time-analysis-s1} shows AUC and mean processing time for both stages. Stage 1 has AUC of 0.94 whereas stage 2 shows an AUC of 0.81. The first stage takes 30 ms  (on average) to process a frame while stage 2 takes around 500 ms on $1080 \times 960$ sized frame. This shows that stage 1 is approx. $16.7$ times faster than stage 2 which resonates with our goal stated in section \ref{sec:goal}. 
 
 Figure \ref{fig:f1-analysis-mog} shows how f1 score of stage 1 changes w-r-t threshold $\tau$ (percentage of foreground pixels). At $0.1\%$, it achieves maximum f1 score of 0.91. Therefore, the stage 1 should be operated at this threshold.
@@ -90,7 +90,7 @@ stage 2     & 0.81    & 500  \\ \hline
 \end{table}
 
 
-\subsection{Noise analysis experiments}
+\subsubsection{Noise analysis experiments}
 Third and final part of our experimental evaluation is noise analysis. In this part, we evaluate the robustness of stage 1 against noise. In terms of noise, we have 3 parameters: $p, \mu, \text{ and } \sigma$. Description of these parameters has been discussed in table \ref{table:noise-params}. To study the influence of one parameter, we vary it while keeping the others constant. 
 
 Table \ref{table:noise-analysis-auc-mog} shows AUC for stage 1 varying $p$ and $\mu$. We use the noise parameters ($AR=0.5$, $\mu=0.5\%$, $\sigma=0.2\%$) while varying $p$ and ($AR=0.5$, $p=2\%$, $\sigma=0.2\%$) while varying $\mu$. For both $p$ and $\mu$, it is clear that increase in noise level decreases the AUC of stage 1.  This result is also verified by f1 score plot of stage 1. Figure \ref{fig:noise-analysis-mog-p} and \ref{fig:noise-analysis-mog-mu} show the effect of change in $p$ and $\mu$ respectively. Figure \ref{fig:noise-analysis-mog-p} shows that as $p$ increases, the whole f1 score curve shifts downward. This indicates the degradation of performance with increase in $p$. Similar observation can also be made in figure \ref{fig:noise-analysis-mog-mu} (showing the effect of change in $\mu$); however, the change is less prominent in this case.  
