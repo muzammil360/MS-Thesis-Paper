@@ -13,7 +13,8 @@ $$y=
 $$
 We define the trespassing activity as the presence of at  least one person in the frame. 
 
-\subsection{Pipeline overview}
+\subsection{Proposed framework}
+\label{sec:proposed-framework}
 In order to tackle this problem, we propose a two-stage trespassing detection model. 
 %This model is in accordance with our approach in Section \ref{sec:approach}. 
 Figure \ref{fig:trespassing-detection-pipeline} shows the block diagram of our system implementing trespassing detection framework. In the first stage, we decide whether a particular frame has activity or not. If it turns out that the given frame has no activity, then it is classified as background frame. No further action needs to be taken for this frame. On the other hand, if it shows activity, then the next step (stage 2) is to investigate whether it can be classified as human trespassing activity or not. Input to our pipeline is a video and each frame is processed one by one. Only the frames classified as showing activity are further processed through stage 2. Output of the system is a time series as discussed in Section \ref{sec:prob-formulation}
@@ -27,6 +28,7 @@ Figure \ref{fig:trespassing-detection-pipeline} shows the block diagram of our s
 
 
 \subsection{Stage 1}
+\label{sec:stage1}
 The goal of this stage is to filter non-activity frames from the activity frames. Thus, it is modeled as a background subtraction problem. Figure \ref{fig:background-subtraction-model} shows the block diagram of background subtraction method. 
 \begin{figure}
     \centering
@@ -35,7 +37,7 @@ The goal of this stage is to filter non-activity frames from the activity frames
     \label{fig:background-subtraction-model}
 \end{figure}
 
-We attempt to model the background as mixture of gaussians \cite{stauffer1999adaptive,power2002understanding}. Since, an image usually represents many different surfaces/objects, each surface/object is expected to give rise to a new gaussian. Thus all the pixel values are better represented by a mixture (sum) of gaussians. Notice that this model represents both foreground and background simultaneously. In order to apply this model to background subtraction problem, we associate each pixel with a particular surface and then associate that surface with either foreground or background. The label of each pixel (foreground/background) is determined by the label of corresponding surface. 
+We attempt to model the background as mixture of gaussians \cite{stauffer1999adaptive,power2002understanding}. Since, an image usually represents many different surfaces/objects, each surface/object is expected to give rise to a new gaussian. Thus all the pixel values are better represented by a mixture (sum) of gaussians. Notice that this model represents both foreground and background simultaneously. In order to apply this model to background subtraction problem, we associate each pixel with a particular surface and then associate that surface with either foreground or background. The label of each pixel (foreground/ background) is determined by the label of corresponding surface. 
 
 \subsubsection{Background (BG) modeler}
 Each surface (or uniform object) that comes into the view is represented by a state $k \in {1,2,3,...,K}$. Some of these states correspond to  background while remaining ones are considered to be foreground. The process  $\mathbf{k}$ which generates the states is modeled by parameters set $\{w_1, w_2, ..., w_K\}$ where $w_k = P(k)$. Each of these parameters represents  a priori probability of surface $k$ appearing in the image. Further, $\sum_{k=1}^K w_k=1$. 
@@ -71,6 +73,7 @@ Output of foreground extractor is a binary mask which indicates whether a pixel 
 
 
 \subsection{Stage 2}
+\label{sec:stage2}
 The goal of this stage is to verify human trespassing in case of activity reported by the stage 1. State-of-the-art deep learning model Faster-RCNN\cite{ref_fasterrcnn} is used to model this stage. Faster-RCNN predicts the objects (their labels and locations) corresponding to input frame. The given image is labelled with \textit{trespassing activity} if there is at least one person predicted by Faster-RCNN with corresponding confidence score greater than a threshold $\nu$. Figure \ref{fig:faster-rcnn-pipeline} shows block diagram of Faster-RCNN with detailed explanation in the following subsections. 
 
 
@@ -169,9 +172,7 @@ $$SL_1(x) = \begin{cases}
 x-0.5,  & \text{otherwise}
 \end{cases}
 $$
-where input parameters to each function carry standard meaning. 
-
-Total loss of the network is simply the sum of RPN loss and classifier loss.
+where input parameters to each function carry standard meaning. Total loss of the network is the sum of RPN loss and classifier loss.
 $$ Loss = Loss_{RPN} + Loss_{cla} $$
 
 Apart from that notice the term $p_i$ in regression term of RPN loss. This makes sure that regression loss is activated only if proposal corresponds to an object, not the background.  Thus bounding box predictions corresponding to background proposals do not contribute towards training. Furthermore, the expression $[q_i>0]$ does a similar job in classifier loss. This again acts as a flag to add regression loss only corresponding to actual objects and not the background. 
