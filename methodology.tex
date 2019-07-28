@@ -15,9 +15,9 @@ We define the trespassing activity as the presence of at  least one person in th
 
 \subsection{Proposed framework}
 \label{sec:proposed-framework}
-In order to tackle this problem, we propose a two-stage trespassing detection model. 
+%In order to tackle this problem, we propose a two-stage trespassing detection model. 
 %This model is in accordance with our approach in Section \ref{sec:approach}. 
-Figure \ref{fig:trespassing-detection-pipeline} shows the block diagram of our system implementing trespassing detection framework. In the first stage, we decide whether a particular frame has activity or not. If it turns out that the given frame has no activity, then it is classified as background frame. No further action needs to be taken for this frame. On the other hand, if it shows activity, then the next step (stage 2) is to investigate whether it can be classified as human trespassing activity or not. Input to our pipeline is a video and each frame is processed one by one. Only the frames classified as showing activity are further processed through stage 2. Output of the system is a time series as discussed in Section \ref{sec:prob-formulation}
+Figure \ref{fig:trespassing-detection-pipeline} shows the block diagram of our proposed framework. In the first stage, we decide whether a particular frame has activity or not. If it turns out that the given frame has no activity, then it is classified as background frame. No further action needs to be taken for this frame. On the other hand, if it shows activity, then the next step (stage 2) is to investigate whether it can be classified as human trespassing activity or not. Input to our pipeline is a video and each frame is processed one by one. Only the frames classified as the ones showing activity are further processed through stage 2. Output of the system is a time series as discussed in Section \ref{sec:prob-formulation}
 
 \begin{figure}
     \centering
@@ -179,8 +179,10 @@ Apart from that notice the term $p_i$ in regression term of RPN loss. This makes
 
 $\lambda_r$ and $\lambda_c$ act as the balancing parameter  between label classification and bounding box regression. The authors of Faster-RCNN claim that $\lambda_r$ is redundant and Faster-RCNN remains insensitive to a large range of $\lambda_r$. 
 
-\begin{table}[]
+\begin{table}
     \centering
+\caption{Description of variables used in loss function}
+\label{table:variable-list}
     \begin{tabular}{| l | l |} \hline
 variable & description \\ \hline \hline
 $\hat{p}_i$ & anchor label prediction \\ \hline 
@@ -196,6 +198,4 @@ $\lambda_c $ & classifier loss balance coef.  \\ \hline
 $N_{cls}$ & mini-batch size  \\ \hline 
 $N_{reg}$ & total anchors \\ \hline 
     \end{tabular}
-    \caption{Description of variables used in loss function}
-    \label{table:variable-list}
 \end{table}{}
