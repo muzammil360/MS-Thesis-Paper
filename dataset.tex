@@ -1,15 +1,16 @@
 \section{Experimental evaluation}
 \label{sec:exp-eval}
 \subsection{Dataset}
-The dataset we used for experimental evaluation is VIRAT 2.0 \cite{virat20}. Instead of directly using the VIRAT 2.0 dataset, we synthesize more data from it. The reason why we need to do that is original dataset targets activity classification and is therefore enriched with human activity. We on the other hand need sparse activity data. Therefore, we use original VIRAT 2.0 dataset to generate new data that has controlled amount of activity to background ratio. 
+The dataset we used for experimental evaluation is VIRAT 2.0 \cite{virat20}. This dataset targets activity classification and is thus enriched with human activity, meaning all the frames mostly contain humans in motion. On the other hand, trespassing data is known to be extremely sparse. Therefore, we augment the VIRAT 2.0 dataset to control the amount of activity to background ratio as described below: 
 
+\vspace{5pt}
 \subsubsection{Synthetic dataset generator}
-Figure \ref{fig:synthetic-dataset-generator} illustrates the black box model of our synthetic dataset generator. In order to generate the synthetic data, we follow the following steps:
+Figure \ref{fig:synthetic-dataset-generator} illustrates the black box model of our synthetic dataset generator. We adopt the following steps to generate the synthetic data: 
 \begin{enumerate} 
     \item identify background frame
-    \item make background block
+    \item make background block(s)
     \item write background block(s)
-    \item write activity block
+    \item write activity block(s)
     \item repeat (3) and (4)
 \end{enumerate}
 
@@ -20,7 +21,7 @@ Figure \ref{fig:synthetic-dataset-generator} illustrates the black box model of 
     \label{fig:synthetic-dataset-generator}
 \end{figure}
 
-Step 1 is simple. We manually scroll through a video and identify a frame with no activity (ideally no person). In step 2, we repeat the frame $\Delta \times fps$ times where $fps$ is the frame-per-second of original video and $\Delta$ is the target length of background block in seconds. Then we alternatively write background block(s) and activity block in turn. An activity block is simply a section of original video. By default, we use $30s$ long activity blocks. Length of background block is also kept at $30s$ by default. Figure \ref{fig:synthetic-video} helps understand the concept of activity block and synthetic video.  
+Step 1 is human labor intensive but simple. We manually scroll through a video and identify a variety of frames with no human. We call these frames, the background frames. In step 2, we repeat each background frame $\Delta \times fps$ times to generate corresponding background block. Here, the $fps$ denotes the frames-per-second of the original video and $\Delta$ indicates the target length of background block in seconds. In step 3, we randomly select a certain number of  background blocks (determined in step 2) and write them to output video stream. Exact number of background blocks written depend on activity ratio, discussed at the end of this subsection. Step 4 writes the activity block in output video stream. An activity block is simply a section of the original video. By default, we use $30s$ long activity blocks. Length of each background block is also kept at $30s$ by default. Figure \ref{fig:synthetic-video} helps understand the concept of activity block and synthetic video.  
 
 \begin{figure}
     \centering
@@ -29,7 +30,7 @@ Step 1 is simple. We manually scroll through a video and identify a frame with n
     \label{fig:synthetic-video}
 \end{figure}
 
-An important concept associated with this procedure is \textit{Activity Ratio}. It is defined as 
+An important metric associated with this procedure is \textit{Activity Ratio}. It captures the fraction of activity present in the output synthetic video. It is defined as: 
 $$ \text{Activity Ratio} = \text{AR} = \frac{1}{1+nBG} $$
 where $nBG=$ number of background blocks per activity block. Figure \ref{fig:synthetic-video} has $nBG=1$. Table \ref{table:activity-ratio} explains the relationship between $nBG$ and AR. 
 
@@ -47,9 +48,10 @@ nBG & nAB:nBG & AR   \\ \hline \hline
 \end{table}
 
 \subsubsection{Adding noise}
-In order to test the robustness of our approach, we also add noise to our synthetic data. Table \ref{table:noise-params} discuses the parameters that control the level of noise. We use \textbf{salt and pepper} noise in our experiments.
+Outdoor surveillance videos are often subjected to environmental challenges such as rain and snow. In order to test the robustness of our approach in those challenging situations, we add noise to our synthetic data. Salt and pepper noise \cite{marques2011practical} is known for modelling the rain and snow effect, therefore we use it in our experiments. 
+Table \ref{table:noise-params} describes the parameters that control the level of noise. 
 
-In order to add noise, we first select $p\%$ of frames from each background block. Each of the frame is equally likely to be selected. Now we draw an integer $r$ from normal distribution with parameters $\mu$ and $\sigma$. Now for each selected frame, we select $r$ pixels and add noise to them. Again all pixels are equally likely. 
+In order to add noise, we first select $p\%$ of frames from each background block. Each of the frames is equally likely to be selected. Now we draw an integer $r$ from the normal distribution with parameters $\mu$ and $\sigma$. For each selected frame, we select $r$ pixels and add noise to them. Again all pixels are equally likely. 
 
 \begin{table}
 \centering
@@ -59,7 +61,7 @@ In order to add noise, we first select $p\%$ of frames from each background bloc
 \hline
 params & description                              \\ \hline \hline
 $p$          & percentage of noisy frames in BG block  \\ 
-$\mu$        & avg. no. of noisy pixels in noisy frame     \\ 
-$\sigma$     & standard deviation of no. of noisy pixels     \\ \hline
+$\mu$        & avg. number of noisy pixels in noisy frame     \\ 
+$\sigma$     & standard deviation of number of noisy pixels     \\ \hline
 \end{tabular}
 \end{table}
