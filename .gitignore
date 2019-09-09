@@ -1,6 +1,6 @@
 
 *.cmd
-*.pdf
+main*.pdf
 *.eps
 *.log
 *.blg
