@@ -18,7 +18,21 @@ We define trespassing activity as the presence of at  least one person in the fr
 \label{sec:proposed-framework}
 %In order to tackle this problem, we propose a two-stage trespassing detection model. 
 %This model is in accordance with our approach in Section \ref{sec:approach}. 
-Figure \ref{fig:trespassing-detection-pipeline} shows the block diagram of our proposed framework. In the first stage, we decide whether a particular frame has an activity or not. If it turns out that the given frame has no activity, then it is classified as background frame. No further action needs to be taken for this frame. On the other hand, if it shows activity, then the next step (stage 2) is to investigate whether it can be classified as human trespassing activity or not. Input to our pipeline is a video with each frame being processed one by one. Only the frames classified as  ``activity frames" are further processed through stage 2. Output of the ARTS corresponds to a time series as discussed in Section \ref{sec:prob-formulation}. 
+Figure \ref{fig:trespassing-detection-framework} shows the outline of our proposed ARTS framework. In the first stage, we decide whether a particular frame has an activity or not. If it turns out that the given frame has no activity, then it is classified as background frame. No further action needs to be taken for this frame. On the other hand, if it shows activity, then the next step (stage 2) is to investigate whether it can be classified as human trespassing activity or not. The rationale for using dual-stage architecture is that the first stage is much faster than the second stage. This allows the first stage to filter out most of the non-activity frames and therefore only prospective frames are processed by stage 2.
+
+
+Figure \ref{fig:trespassing-detection-pipeline} illustrates the pipeline modeling the ARTS framework.
+Input to our pipeline is a video with each frame being processed one by one. Only the frames classified as  ``activity frames" are further processed through stage 2. Output of the ARTS corresponds to a time series as discussed in Section \ref{sec:prob-formulation}. 
+
+Input to the stage 1 is a video frame whereas the output is a binary decision indicating whether it is an activity frame or background frame. The stage 2 not only gets the output of stage 1 as input, but also the corresponding frame. It skips the processing of the frame in case it is of the background type; otherwise, it processes the frame for verification of the human trespassing activity. The output of stage 2 is also a binary decision indicating the human trespassing activity or other activity. Concatenation of the stage 2 output for each input frame produces the output time series. The proposed ARTS framework is extremely flexible in the sense that it allows any pair of algorithms to construct the trespassing detection pipeline given they perform the respective functions of stage 1 and stage 2. Apart from that, the only restriction is that the processing time per frame of stage 1 algorithm should be much less than that of stage 2 algorithm to reap the practical benefit of ARTS. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth,trim={50 110 50 130},clip]{images/trespassing-detection-framework}
+    \caption{Trespassing detection framework}
+    \label{fig:trespassing-detection-framework}
+\end{figure}
+
 
 \begin{figure}
     \centering
