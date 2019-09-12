@@ -11,6 +11,10 @@ Due to above mentioned reasons, bringing automation and artificial intelligence 
 \label{sec:goal}
 Given a surveillance video, the problem of trespassing detection is to decide whether each given frame has human trespassing activity or not. We define a trespasser as a human within the camera field of view. We not only want to predict the occurrence of trespassers but we also want to do so in a time and resource efficient manner. We notice that a railroad surveillance video is extremely sparse in terms of trespassing activity, i.e., in a given 24 hours of railroad surveillance video, most of the video shows no trespassing activity. To this work, we propose to leverage this property of sparseness to reduce the processing time. 
 Further, we postulate that the detection performance\footnote{Two terms, ``accuracy'' and ``performance'', have been interchangeably used in text. However, experimental evaluation uses $f1$ score as concrete evaluation metric.} and speed of detection are two conflicting goals. Generally, if one wishes to improve the speed of detection, they will have to sacrifice accuracy and vice versa. Therefore, we are interested in developing a  flexible solution that is capable of trading-off performance with computational time.
+
+\subsection{State of the art}
+Despite the obvious need, there has been limited activity among the research community towards solving this problem. Recently, Zhang et. al. \cite{zhang2018automated} proposed a system focusing on detecting the near-misses. However, their proposed methodology makes an important assumption that the train will always constitute the majority of the moving pixels. This strategy may fail if the camera is located away from the train. Additionally, Salmane et. al. \cite{salmane2015video} proposed a system for detecting the hazard situations at railway crossings. However, their system only suffices to detect the moving objects and does not discriminate them into train, vehicle or person as would be required for trespassing detection. Another weakness common to these two methods is that they do not explore advanced CNN based deep learning methods that have been shown to outperform conventional methods \cite{krizhevsky2012imagenet}. 
+
 \subsection{Approach}
 %\\ \textbf{Approach}\\ 
 Our framework \textbf{ARTS} (\underline{A}utomated \underline{R}ailroad \underline{T}respassing detection \underline{S}ystem) solves the identified problem of automated trespassing detection with envisioned goals by adopting a two-step approach. The first stage is responsible for filtering out frames that show little to no activity, this way reducing the amount of data to be processed by the later extremely compute-intensive stage. The second stage adopts state-of-the-art deep learning model based on CNN to ensure effective detection of trespassing activity.
@@ -18,9 +22,9 @@ Our framework \textbf{ARTS} (\underline{A}utomated \underline{R}ailroad \underli
 %\\ \textbf{Contributions} \\
 Following are the key contributions of this work:
 \begin{itemize}
-\item We propose a flexible trespassing detection framework called \textbf{ARTS} that can trade-off speed and accuracy while simultaneously leveraging the property of activity sparseness in a dataset. (Sec. \ref{sec:proposed-framework})
+\item We propose a flexible trespassing detection framework called \textbf{ARTS} that can trade-off speed and accuracy while simultaneously leveraging the property of activity sparseness in a dataset. (Sec. \ref{sec:time-accuracy-trafe-off})
 
-\item Our proposed ARTS framework adopts a \textit{plug and play} design to allow plugging in any algorithm suitable to stage 1 or stage 2. 
+\item Our proposed ARTS framework adopts a \textit{plug and play} design to allow embedding any algorithm suitable to individual stages of our framework. (Sec. \ref{sec:proposed-framework})
 
 \item Our solution combines an inexpensive yet effective traditional computer vision approach with a state-of-the-art deep learning architecture to develop an overall robust technology. (Sec. \ref{sec:stage1} and \ref{sec:stage2})
 

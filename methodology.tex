@@ -83,6 +83,17 @@ $$ B=\operatorname*{argmin}_b (\sum_{j=1}^b w_{j} > T)$$
 \subsubsection{Threshold}
 The output of the foreground extractor is a binary mask which indicates whether a pixel belongs to the foreground or not. All the foreground pixels in the image can be summed up and their ratio to the total number of pixels in the frame can be compared to a threshold value $\tau$. If the ratio is greater than the threshold, then this frame is regarded as activity frame (1); otherwise it is classified as background frame (0). 
 
+\begin{table}[]
+\begin{tabular}{| l | l |} \hline
+notation                 & description                                   \\ \hline \hline
+$k$                        & state representing a surface in image         \\ \hline
+$w_k$                     & prior probability of surface k                \\ \hline
+$X$                        & pixel value                                   \\ \hline
+$\mu_k$   & mean pixel value of surface k                 \\ \hline
+$\Sigma_k$ & covariance matrix of pixel value of surface k \\ \hline
+$\theta_k$ & $\{ \mu_k, \Sigma_k \}$  \\ \hline                         
+\end{tabular}
+\end{table}
 
 \subsection{Stage 2 of the ARTS framework}
 \label{sec:stage2}
