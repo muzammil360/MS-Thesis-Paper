@@ -52,7 +52,8 @@ The goal of this first stage is to filter non-activity frames from the activity 
     \label{fig:background-subtraction-model}
 \end{figure}
 
-We propose to model the background as mixture of gaussians \cite{stauffer1999adaptive,power2002understanding}. Since, an image usually represents many different surfaces (objects), each surface is expected to give rise to a new gaussian. Thus all pixel values are better represented by a mixture (sum) of gaussians. Notice that this model represents both foreground and background simultaneously. In order to apply this model to the background subtraction problem, we associate each pixel with a particular surface and then associate that surface with either foreground or background. The label of each pixel, namely either foreground or background, is determined by the label of the corresponding surface. 
+We propose to model the background as mixture of gaussians \cite{stauffer1999adaptive,power2002understanding}. Since, an image usually represents many different surfaces (objects), each surface is expected to give rise to a new gaussian. Thus all pixel values are better represented by a mixture (sum) of gaussians. Notice that this model represents both foreground and background simultaneously. In order to apply this model to the background subtraction problem, we associate each pixel with a particular surface and then associate that surface with either foreground or background. The label of each pixel, namely either foreground or background, is determined by the label of the corresponding surface. Table \ref{table:stage1-notation} shows the notation used in stage 1.
+
 
 \subsubsection{Background (BG) modeler}
 Each surface (or uniform object) that comes into the camera view is represented by a state $k \in {1,2,3,...,K}$. Some of these states correspond to  background while the remaining ones are considered to be foreground. The process  $\mathbf{k}$ which generates the states is modeled by parameters set $\{w_1, w_2, ..., w_K\}$ where $w_k = P(k)$. Each of these parameters represents  a priori probability of surface $k$ appearing in the image. Further we have, $\sum_{k=1}^K w_k=1$. 
@@ -83,17 +84,28 @@ $$ B=\operatorname*{argmin}_b (\sum_{j=1}^b w_{j} > T)$$
 \subsubsection{Threshold}
 The output of the foreground extractor is a binary mask which indicates whether a pixel belongs to the foreground or not. All the foreground pixels in the image can be summed up and their ratio to the total number of pixels in the frame can be compared to a threshold value $\tau$. If the ratio is greater than the threshold, then this frame is regarded as activity frame (1); otherwise it is classified as background frame (0). 
 
-\begin{table}[]
+
+\begin{table}
+\caption{Stage 1 notation}
+\label{table:stage1-notation}
 \begin{tabular}{| l | l |} \hline
+
 notation                 & description                                   \\ \hline \hline
-$k$                        & state representing a surface in image         \\ \hline
-$w_k$                     & prior probability of surface k                \\ \hline
-$X$                        & pixel value                                   \\ \hline
-$\mu_k$   & mean pixel value of surface k                 \\ \hline
-$\Sigma_k$ & covariance matrix of pixel value of surface k \\ \hline
-$\theta_k$ & $\{ \mu_k, \Sigma_k \}$  \\ \hline                         
+$k$                      & state representing a surface in image         \\ \hline
+$K$                      & total number of target surfaces in image      \\ \hline
+$w_k$                    & prior probability of surface k                \\ \hline
+$P(k)$                   & $w_k$                                         \\ \hline
+$X$                      & pixel value                                   \\ \hline
+$\mathbf{X}$             & random variable modeling pixel values         \\ \hline        
+$\mu_k$                  & mean pixel value of surface k                 \\ \hline
+$\Sigma_k$               & \small covariance matrix of pixel value of surface k \\ \hline
+$\theta_k$               & $\{ \mu_k, \Sigma_k \}$                       \\ \hline
+$\Phi $                  & $ \{w_1, \mu_1, \Sigma_1,..., w_K, \mu_K, \Sigma_K \}$     \\ \hline
+$f_{\mathbf{X}|k}(X|k,\Phi)$    & prob. of pixel value process $\mathbf{X}$ given $k$     \\ \hline
+$P(k|X,\Phi)$            & posterior probability                          \\ \hline
 \end{tabular}
 \end{table}
+
 
 \subsection{Stage 2 of the ARTS framework}
 \label{sec:stage2}
