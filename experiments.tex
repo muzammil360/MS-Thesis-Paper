@@ -1,5 +1,7 @@
-\subsection{Experiments and discussion}
-To validate our approach, we carry out a comprehensive experimental evaluation study.  We study our proposed approach from three different perspectives: 
+%\subsection{Experiments and discussion}
+
+\textbf{Experimental methodology:}
+To validate our approach, we carry out a comprehensive experimental evaluation study. We study the proposed ARTS approach from three different perspectives: 
 
 \begin{comment}
 \begin{enumerate}
@@ -18,18 +20,18 @@ We shall start by discussing the time-accuracy trade-off study. This allows us t
 \end{enumerate}
 
 \vspace{5pt}
-\subsubsection{Time-accuracy trade-off experiment}
+\subsection{Time-accuracy trade-off experiment}
 \label{sec:time-accuracy-trafe-off}
-In the time-accuracy trade off experiment, we study the trade-off the trade off between data processing time and detection accuracy.
+In the time-accuracy trade off experiment, we study the trade-off  between data processing time and detection accuracy.
 %\footnote{The term ``accuracy'' is loosely used in terms of performance. The study uses $f1$ score as the evaluation metric}. 
-We vary the control parameters such as the threshold in stage 1, and observe the time it takes to process the data along with the accuracy of the complete pipeline. Figure \ref{fig:time-acc-tradeoff-ar-mog} depicts the time-accuracy trade off for varying activity ratios (AR). The trade off curve depicts the f1 score on the y-axis and the normalized processing time on the x-axis. F1 score and normalized processing time are defined as: 
+We vary the control parameters such as the threshold $\tau$ in stage 1, and observe the time it takes to process the data along with the accuracy of the complete pipeline. Figure \ref{fig:time-acc-tradeoff-ar-mog} depicts the time-accuracy trade off for varying activity ratios (AR). The trade off curve depicts the f1 score on the y-axis and the normalized processing time on the x-axis. F1 score and normalized processing time are defined as: 
 $$ f1 = \frac{2 \times precision \times recall}{precision + recall}$$
 $$\text{normalized time} = \frac{\text{total time to process video data}}{\text{length of video data}}$$
 where $precision$ and $recall$ carry the standard meaning. In this study, we use the f1 score as the evaluation metric as opposed to standard accuracy because we have unbalanced dataset with respect to classes. The dataset has much more background data (-ve class) as compared to trespassing data (+ve class). Therefore, f1 score shall give a more realistic picture of the performance. 
 
 It is clear by Figure \ref{fig:time-acc-tradeoff-ar-mog} that as the f1 score goes up, the normalized processing time also goes up, indicating the trade off. Notice that as the AR decreases (as indicated on the different lines in figure \ref{fig:time-acc-tradeoff-ar-mog}), the trade off curve shifts to the left. This is because in a less active environment i.e.,low AR, stage 1 is able to filter out more frames and thus less frames need to be processed by stage 2. Thus the curve shifts to the left indicating less overall processing time is consumed.   
 
-For any curve in Figure \ref{fig:time-acc-tradeoff-ar-mog}, with a given AR fixed, the top right point corresponds to a small value of the stage 1 threshold ($\tau$). As $\tau$ is increased, we move towards the left; consuming less time at the cost of lower quality performance (f1 score). This is expected as stage 1 filters more and more frames with an increasing threshold ($\tau$) and thus a lesser number of frames are processed by stage 2.The synthetic dataset parameters used in this experiment are shown in Table \ref{table:fig1_data_params}. 
+For any curve in Figure \ref{fig:time-acc-tradeoff-ar-mog}, with a given AR fixed, the top right point corresponds to a small value of the stage 1 threshold ($\tau$). As $\tau$ is increased, we move towards the left; consuming less time at the cost of lower quality performance (f1 score). This is expected as stage 1 filters more and more frames with an increasing threshold ($\tau$) and thus a lesser number of frames are processed by stage 2. The synthetic dataset parameters used in this experiment are shown in Table \ref{table:fig1_data_params}. 
 
 \begin{figure}
     \centering
@@ -45,15 +47,15 @@ For any curve in Figure \ref{fig:time-acc-tradeoff-ar-mog}, with a given AR fixe
 \begin{tabular}{|l|l|}
 \hline
 parameter             & value  \\ \hline \hline
-p                     & 1\%    \\ 
-$\mu$    & 0.50\% \\ 
+p                     & 1\%    \\ \hline
+$\mu$    & 0.50\% \\ \hline
 $\sigma$ & 0.20\% \\ \hline
 \end{tabular}
 \end{table}
 
 \vspace{5pt}
-\subsubsection{Stage-wise analysis study}
-In this study, we independently analyse stage 1 and 2 using f1 score and Area Under the Curve (AUC). AUC has been used an additional metric since it measures the performance independent of any particular threshold and f1 score is useful in understanding the performance w-r-t threshold.  
+\subsection{Stage-wise analysis study}
+In this study, we independently analyze stage 1 and 2 using f1 score and Area Under the Curve (AUC). AUC has been used an additional metric since it measures the performance independent of any particular threshold and f1 score is useful in understanding the performance w-r-t threshold.  
 %F1 score is primarily used for analysis as it helps in selecting optimum operating threshold. 
 %Apart from that, we use AUC (Area Under the Curve) as the evaluation metric since it is not affected by class imbalance. We naturally have class imbalance since very few trespassing frames exist as compared to other frames. 
 Table \ref{table:auc-time-analysis-s1} shows the AUC and mean processing time for each of the stages. Stage 1 has AUC of 0.94 whereas stage 2 shows an AUC of 0.81. The first stage takes 30 ms  (on average) to process a frame while stage 2 takes around 500 ms on $1080 \times 960$ sized frame. This shows that stage 1 is approx. $16.7$ times faster than stage 2 which resonates with our goal stated in Section \ref{sec:goal}. 
@@ -102,13 +104,13 @@ $\nu =  \text{prediction probability threshold.}$
 \hline
 stage   	& AUC     & mean processing \\
             &         &  time (ms)  \\ \hline \hline
-stage 1     & 0.94    & 30    \\
+stage 1     & 0.94    & 30    \\ \hline
 stage 2     & 0.81    & 500  \\ \hline
 \end{tabular}
 \end{table}
 
 \vspace{5pt}
-\subsubsection{Noise analysis experiments}
+\subsection{Noise analysis experiments}
 Third and final study of our experimental evaluation concerns noise analysis. In this part, we evaluate the robustness of stage 1 against noise. We have 3 parameters: $p, \mu, \text{ and } \sigma$ to define the level of noise. A description of these parameters is given in Table \ref{table:noise-params}. To study the influence of one parameter, we vary it while keeping the others constant. 
 
 Table \ref{table:noise-analysis-auc-mog} shows AUC for stage 1 when varying $p$ and $\mu$. We use the noise parameters ($AR=0.5$, $\mu=0.5\%$, $\sigma=0.2\%$) while varying $p$, and ($AR=0.5$, $p=2\%$, $\sigma=0.2\%$) while varying $\mu$. For both $p$ and $\mu$, it is clear that an increase in the noise level decreases the AUC of stage 1.  This result is also confirmed by f1 score plots of the stage 1 (Figure \ref{fig:noise-analysis-mog-p} and \ref{fig:noise-analysis-mog-mu}). Figures \ref{fig:noise-analysis-mog-p} and \ref{fig:noise-analysis-mog-mu} show the effect of changes in $p$ and $\mu$ respectively. Figure \ref{fig:noise-analysis-mog-p} shows that as $p$ increases, the overall f1 score curve shifts downward. This indicates the degradation of performance with an increase in $p$. A similar observation is also seen in Figure \ref{fig:noise-analysis-mog-mu} that shows the effect of change in $\mu$. However, the change is less prominent in this case.  
@@ -127,9 +129,9 @@ $\mu$ sweep: $AR=0.5$, $p=2\%$, $\sigma=0.2\%$ \newline }
 \begin{tabular}{|l|l|}
 \hline
 $p$         & AUC  \\ \hline \hline
-2\%         & 0.93   \\
-4\%         & 0.87    \\ 
-6\%         & 0.83      \\ 
+2\%         & 0.93   \\ \hline
+4\%         & 0.87    \\ \hline
+6\%         & 0.83      \\ \hline
 8\%         & 0.78       \\ \hline
 \end{tabular}
 
@@ -137,9 +139,9 @@ $p$         & AUC  \\ \hline \hline
 \begin{tabular}{|l|l|}
 \hline
 $\mu$         & AUC  \\ \hline \hline
-0.5\%         & 0.93   \\
-0.7\%         & 0.92    \\ 
-0.9\%         & 0.91      \\ 
+0.5\%         & 0.93   \\ \hline
+0.7\%         & 0.92    \\ \hline
+0.9\%         & 0.91      \\ \hline
 1.1\%         & 0.88       \\ \hline
 \end{tabular}
 

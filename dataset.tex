@@ -1,12 +1,15 @@
 \section{Experimental evaluation}
 \label{sec:exp-eval}
+\textbf{Experimental setup:}
+All the experiments discussed in the study have been carried out using single Nvidia Tesla K20 GPU. We use pytorch based Faster-RCNN implementation\footnote{https://github.com/facebookresearch/maskrcnn-benchmark} along with OpenCV v4.0.0 running on Red Hat Linux based HPC cluster. 
+
 \subsection{Dataset}
 The dataset we used for experimental evaluation is VIRAT 2.0 \cite{virat20}. This dataset targets activity classification and is thus enriched with human activity, meaning all the frames mostly contain humans in motion. On the other hand, trespassing data is known to be extremely sparse. Therefore, we augment the VIRAT 2.0 dataset to control the amount of activity to background ratio as described below: 
 
 \vspace{5pt}
 \subsubsection{Synthetic dataset generator}
 \label{sec:synthetic-dataset-generator}
-Figure \ref{fig:synthetic-dataset-generator} illustrates the black box model of our synthetic dataset generator. We adopt the following steps to generate the synthetic data: 
+Figure \ref{fig:synthetic-dataset-generator} illustrates the model of our synthetic dataset generator. We adopt the following steps to generate the synthetic data: 
 \begin{enumerate} 
     \item identify background frame
     \item make background block(s)
@@ -42,8 +45,8 @@ where $nBG=$ number of background blocks per activity block. Figure \ref{fig:syn
 \label{table:activity-ratio}
 \begin{tabular}{@{}| l | l | l | @{}} \hline
 nBG & nAB:nBG & AR   \\ \hline \hline
-1   & 1:1     & 0.5  \\
-3   & 1:3     & 0.25 \\
+1   & 1:1     & 0.5  \\ \hline
+3   & 1:3     & 0.25 \\ \hline
 5   & 1:5     & 0.16 \\ \hline
 \end{tabular}
 \end{table}
@@ -61,8 +64,8 @@ In order to add noise, we first select $p\%$ of frames from each background bloc
 \begin{tabular}{|l|l|}
 \hline
 params & description                              \\ \hline \hline
-$p$          & percentage of noisy frames in BG block  \\ 
-$\mu$        & avg. number of noisy pixels in noisy frame     \\ 
+$p$          & percentage of noisy frames in BG block  \\ \hline
+$\mu$        & avg. number of noisy pixels in noisy frame     \\ \hline
 $\sigma$     & standard deviation of number of noisy pixels     \\ \hline
 \end{tabular}
 \end{table}
