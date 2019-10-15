@@ -1,15 +1,15 @@
 \section{Experimental evaluation}
 \label{sec:exp-eval}
 \textbf{Experimental setup:}
-All the experiments discussed in the study have been carried out using single Nvidia Tesla K20 GPU. We use pytorch based Faster-RCNN implementation\footnote{https://github.com/facebookresearch/maskrcnn-benchmark} along with OpenCV v4.0.0 running on Red Hat Linux based HPC cluster. 
+All our experiments have been carried out using single Nvidia Tesla K20 GPU. We use pytorch based Faster-RCNN implementation\footnote{https://github.com/facebookresearch/maskrcnn-benchmark} along OpenCV v4.0.0 running on Red Hat Linux based HPC cluster. 
 
 \subsection{Dataset}
-The dataset we used for experimental evaluation is VIRAT 2.0 \cite{virat20}. This dataset targets activity classification and is thus enriched with human activity, meaning all the frames mostly contain humans in motion. On the other hand, trespassing data is known to be extremely sparse. Therefore, we augment the VIRAT 2.0 dataset to control the amount of activity to background ratio as described below: 
+The dataset used for experimental evaluation is VIRAT 2.0 \cite{virat20}. This video dataset has been developed for activity classification and is with human activity; meaning frames mostly contain humans in motion. In contrast, trespassing data is known to be extremely sparse because trespassing is an anomaly instead of common steady traffic pattern. To model this, we augment the VIRAT 2.0 dataset to control the amount of activity to background ratio as described below.
 
 \vspace{5pt}
 \subsubsection{Synthetic dataset generator}
 \label{sec:synthetic-dataset-generator}
-Figure \ref{fig:synthetic-dataset-generator} illustrates the model of our synthetic dataset generator. We adopt the following steps to generate the synthetic data: 
+Figure \ref{fig:synthetic-dataset-generator} illustrates our synthetic dataset generator which adopts the following steps: 
 \begin{enumerate} 
     \item identify background frame
     \item make background block(s)
@@ -25,7 +25,7 @@ Figure \ref{fig:synthetic-dataset-generator} illustrates the model of our synthe
     \label{fig:synthetic-dataset-generator}
 \end{figure}
 
-Step 1 is human labor intensive but simple. We manually scroll through a video and identify a variety of frames with no human. We call these frames, the background frames. In step 2, we repeat each background frame $\Delta \times fps$ times to generate corresponding background block. Here, the $fps$ denotes the frames-per-second of the original video and $\Delta$ indicates the target length of background block in seconds. In step 3, we randomly select a certain number of  background blocks (determined in step 2) and write them to output video stream. Exact number of background blocks written depend on activity ratio, discussed at the end of this subsection. Step 4 writes the activity block in output video stream. An activity block is simply a section of the original video. By default, we use $30s$ long activity blocks. Length of each background block is also kept at $30s$ by default. Figure \ref{fig:synthetic-video} helps understand the concept of activity block and synthetic video.  
+Step 1 is human labor intensive but simple. We manually scroll through a video and identify a variety of frames with no human. We call these frames, the background frames. In step 2, we repeat each background frame $\Delta \times fps$ times to generate the corresponding background block. Here, the $fps$ denotes the frames-per-second of the original video and $\Delta$ indicates the target length of background blocks in seconds. In step 3, we randomly select a certain number of  background blocks (determined in step 2) and write them to output video stream. The exact number of background blocks written depends on activity ratio, discussed at the end of this subsection. Step 4 writes the activity block in output video stream. An activity block is simply a section of the original video. By default, we use $30s$ long activity blocks. The length of each background block is also kept at $30s$ by default. Figure \ref{fig:synthetic-video} explains the concept of activity block and synthetic video.  
 
 \begin{figure}
     \centering
@@ -34,7 +34,7 @@ Step 1 is human labor intensive but simple. We manually scroll through a video a
     \label{fig:synthetic-video}
 \end{figure}
 
-An important metric associated with this procedure is \textit{Activity Ratio}. It captures the fraction of activity present in the output synthetic video. It is defined as: 
+An important metric associated with this procedure is \textit{Activity Ratio}. It captures the fraction of activity present in the output video. It is defined as: 
 $$ \text{Activity Ratio} = \text{AR} = \frac{1}{1+nBG} $$
 where $nBG=$ number of background blocks per activity block. Figure \ref{fig:synthetic-video} has $nBG=1$. Table \ref{table:activity-ratio} explains the relationship between $nBG$ and AR. 
 
@@ -52,10 +52,10 @@ nBG & nAB:nBG & AR   \\ \hline \hline
 \end{table}
 
 \subsubsection{Adding noise}
-Outdoor surveillance videos are often subjected to environmental challenges such as rain and snow. In order to test the robustness of our approach in those challenging situations, we add noise to our synthetic data. Salt and pepper noise \cite{marques2011practical} is known for modelling the rain and snow effect, therefore we use it in our experiments. 
+Outdoor surveillance videos are often subjected to environmental challenges such as rain and snow. In order to test the robustness of our approach in those challenging situations, we add noise to our synthetic data. Salt and pepper noise \cite{marques2011practical} is known for modeling rain and snow effect, therefore we use it in our experiments. 
 Table \ref{table:noise-params} describes the parameters that control the level of noise. 
 
-In order to add noise, we first select $p\%$ of frames from each background block. Each of the frames is equally likely to be selected. Now we draw an integer $r$ from the normal distribution with parameters $\mu$ and $\sigma$. For each selected frame, we select $r$ pixels and add noise to them. Again all pixels are equally likely. 
+To add noise, we first select $p\%$ of frames from each background block. Each frame is equally likely to be selected. Now we draw an integer $r$ from the normal distribution with parameters $\mu$ and $\sigma$. For each selected frame, we select $r$ pixels and add noise to them. Again all pixels are equally likely. 
 
 \begin{table}
 \centering
